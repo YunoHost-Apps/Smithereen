@@ -100,8 +100,8 @@ chown $app:$app "$install_dir/some_config_file"
 
 
 # max file upload size
-media_cache_size="${media_upload_size//[!0-9]/}000000000"
-media_cache_biggest_size="${media_upload_size//[!0-9]/}000000"
+media_cache_size="${media_cache_size//[!0-9]/}000000000"
+media_cache_biggest_size="${media_cache_biggest_file//[!0-9]/}000000"
 ynh_replace_string --match_string="__MEDIA_CACHE_SIZE__" --replace_string="UPLOAD_LIMIT=$media_cache_size" --target_file="$install_dir/config.properties
 ynh_replace_string --match_string="__MEDIA_CACHE_BIGGEST_SIZE__" --replace_string="UPLOAD_LIMIT=$media_cache_biggest_size" --target_file="$install_dir/config.properties"
 
