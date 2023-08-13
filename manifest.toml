@@ -63,5 +63,7 @@ ram.runtime = "50M"
     # of explanation regarding the behavior and properties for each of those
 
     [resources.sources]
-
     type = "mysql"
+
+    [resources.apt]
+    packages = "openjdk-17-jdk maven"
