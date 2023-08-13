@@ -30,7 +30,11 @@ chown -R $app:www-data "$install_dir"
 
 ynh_exec_warn ynh_exec_as $app -lc "mvn package -DskipTests=true"
 ynh_warn ls -l
-mv ./smithereen.jar $install_dir/smithereen.jar
+mv smithereen.jar $install_dir/smithereen.jar
+#=================================================
+# SETUP MYSQL
+#=================================================
+ynh_mysql_execute_file_as_root --file=schema.sql --database=$db_name
 
 #=================================================
 # SYSTEM CONFIGURATION

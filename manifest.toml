@@ -117,7 +117,7 @@ ram.runtime = "50M"
     # and store the corresponding setting $install_dir
 
     [resources.apt]
-    packages = "openjdk-17-jdk maven mysql"
+    packages = "openjdk-17-jdk maven ca-certificates-java"
 
     [resources.database]
     type = "mysql"
