@@ -1,13 +1,14 @@
 [Unit]
-Description=Small description of the service
-After=network.target
+Description=Smithereen social network server
+After=network.target mysqld.service
 
 [Service]
 Type=simple
 User=__APP__
-Group=__APP__
+Group=www-data
 WorkingDirectory=__INSTALL_DIR__/
-ExecStart=__INSTALL_DIR__/script
+ExecStart=java -Djna.library.path=__INSTALL_DIR__ -jar __INSTALL_DIR__/smithereen.jar __INSTALL_DIR__/config.properties
+Restart=always
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
 
