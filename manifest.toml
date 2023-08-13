@@ -96,8 +96,8 @@ ram.runtime = "50M"
     # See the packaging documentation for the full set
     # of explanation regarding the behavior and properties for each of those
 
+    [resources.apt]
+    packages = "openjdk-17-jdk maven mysql"
+
     [resources.database]
     type = "mysql"
-
-    [resources.apt]
-    packages = "openjdk-17-jdk maven"
