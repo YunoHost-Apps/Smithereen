@@ -28,7 +28,7 @@ ynh_setup_source --dest_dir="$install_dir"
 # ownership to all files such as after the ynh_setup_source step
 chown -R $app:www-data "$install_dir"
 
-mvn package -DskipTests=true
+ynh_exec_warn ynh_exec_as $app -lc "mvn package -DskipTests=true"
 ynh_warn ls -l
 mv smithereen.jar $install_dir/smithereen.jar
 #=================================================
@@ -102,6 +102,21 @@ ynh_add_config --template="config.properties" --destination="$install_dir/config
 chmod 600 "$install_dir/some_config_file"
 chown $app:$app "$install_dir/some_config_file"
 
+
+# max file upload size
+media_cache_size="${media_cache_size//[!0-9]/}000000000"
+media_cache_biggest_size="${media_cache_biggest_file//[!0-9]/}000000"
+ynh_replace_string --match_string="__MEDIA_CACHE_SIZE__" --replace_string="UPLOAD_LIMIT=$media_cache_size" --target_file="$install_dir/config.properties
+ynh_replace_string --match_string="__MEDIA_CACHE_BIGGEST_SIZE__" --replace_string="UPLOAD_LIMIT=$media_cache_biggest_size" --target_file="$install_dir/config.properties"
+
+# Secret keys
+img_proxy_key=$(ynh_string_random)
+img_proxy_salt=$(ynh_string_random)
+ynh_replace_string --match_string="__IMG_PROXY_KEY__" --replace_string="$img_proxy_key" --target_file="$install_dir/config.properties"
+ynh_replace_string --match_string="__IMG_PROXY_SALT__" --replace_string="$img_proxy_salt" --target_file="$install_dir/config.properties"
+ynh_store_file_checksum --file="$install_dir/config.properties"
+
+
 ### For more complex cases where you want to replace stuff using regexes,
 ### you shoud rely on ynh_replace_string (which is basically a wrapper for sed)
 ### When doing so, you also need to manually call ynh_store_file_checksum
@@ -118,6 +133,13 @@ ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+
+#=================================================
+# SPECIFIC FINALIZATION
+#=================================================
+# CREATE ADMIN USER
+#=================================================
+ynh_exec_warn ynh_exec_as $app -lc "java -jar $install_dir/smithereen.jar $install_dir/config.properties init_admin"
 
 #=================================================
 # END OF SCRIPT
