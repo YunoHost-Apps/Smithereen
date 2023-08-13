@@ -93,11 +93,39 @@ ram.runtime = "50M"
     default = "50MB"
 
 [resources]
-    # See the packaging documentation for the full set
-    # of explanation regarding the behavior and properties for each of those
+
+    [resources.sources.main]
+    url = "https://github.com/grishka/Smithereen/archive/refs/tags/0.5.0.tar.gz"
+    sha256 = "0eba543213b6650857253febbf545b9d8d5fec70e5ec99a147d74de559c4cbd8"
+
+    # These infos are used by https://github.com/YunoHost/apps/blob/master/tools/autoupdate_app_sources/autoupdate_app_sources.py
+    # to auto-update the previous asset urls and sha256sum + manifest version
+    # assuming the upstream's code repo is on github and relies on tags or releases
+    # See the 'sources' resource documentation for more details
+
+    autoupdate.strategy = "latest_github_tag"
+        
+    [resources.system_user]
+    # This will provision/deprovision a unix system user
+    
+    [resources.data_dir]
+    # This will create/remove the data dir as /home/yunohost.app/$app
+    # and store the corresponding setting $data_dir
+
+    [resources.install_dir]
+    # This will create/remove the install dir as /var/www/$app
+    # and store the corresponding setting $install_dir
 
     [resources.apt]
     packages = "openjdk-17-jdk maven mysql"
 
     [resources.database]
     type = "mysql"
+
+    [resources.ports]
+
+    [resources.permissions]
+    # This will configure SSOwat permission for $domain/$path/
+    # The initial allowed group of user is configured via the init_main_permission question (public=visitors, private=all_users)
+    main.url = "/"
+
